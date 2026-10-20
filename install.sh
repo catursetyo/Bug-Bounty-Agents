@@ -8,11 +8,8 @@
 #   ./install.sh --target claude-local   # claude code, current project
 #   ./install.sh --target copilot        # github copilot chat (vs code)
 #   ./install.sh --target cursor         # cursor (current project)
-<<<<<<< HEAD
-=======
 #   ./install.sh --target opencode       # opencode (global)
 #   ./install.sh --target opencode-local # opencode, current project
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 #   ./install.sh --target all            # install everywhere detected
 #   ./install.sh --dry-run               # show what would happen
 #   ./install.sh --uninstall --target X  # remove agents from target
@@ -44,20 +41,12 @@ run() {
   if [[ $DRY_RUN -eq 1 ]]; then
     printf '%b%s%b\n' "${c_dim}" "[dry-run] $*" "${c_reset}"
   else
-<<<<<<< HEAD
-    eval "$@"
-=======
     "$@"
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
   fi
 }
 
 usage() {
-<<<<<<< HEAD
-  sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'
-=======
   awk 'NR==1{next} /^#/{sub(/^# ?/, ""); print; next} {exit}' "$0"
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
   exit 0
 }
 
@@ -85,8 +74,6 @@ esac
 CLAUDE_GLOBAL="$HOME/.claude/agents"
 CLAUDE_LOCAL=".claude/agents"
 CURSOR_LOCAL=".cursor/rules"
-<<<<<<< HEAD
-=======
 OPENCODE_GLOBAL="$HOME/.config/opencode/agents"
 OPENCODE_LOCAL=".opencode/agents"
 
@@ -99,22 +86,15 @@ if command -v opencode >/dev/null 2>&1; then
     2*|"opencode 2"*) OPENCODE_FMT="v2" ;;
   esac
 fi
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 
 # ---- detection --------------------------------------------------------------
 
 detect() {
   local found=()
-<<<<<<< HEAD
-  command -v claude  >/dev/null 2>&1 && found+=("claude")
-  command -v code    >/dev/null 2>&1 && found+=("copilot")
-  command -v cursor  >/dev/null 2>&1 && found+=("cursor")
-=======
   command -v claude   >/dev/null 2>&1 && found+=("claude")
   command -v code     >/dev/null 2>&1 && found+=("copilot")
   command -v cursor   >/dev/null 2>&1 && found+=("cursor")
   command -v opencode >/dev/null 2>&1 && found+=("opencode")
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
   printf '%s\n' "${found[@]:-}"
 }
 
@@ -132,20 +112,12 @@ agent_files() {
 
 install_to_dir() {
   local dest="$1" suffix="${2:-}"
-<<<<<<< HEAD
-  run "mkdir -p \"$dest\""
-=======
   run mkdir -p "$dest"
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
   local count=0
   while IFS= read -r f; do
     local base; base="$(basename "$f")"
     local out="$dest/${base%.md}${suffix}"
-<<<<<<< HEAD
-    run "cp \"$f\" \"$out\""
-=======
     run cp "$f" "$out"
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
     count=$((count + 1))
   done < <(agent_files)
   ok "installed $count agents → $dest"
@@ -158,17 +130,11 @@ uninstall_from_dir() {
   while IFS= read -r f; do
     local base; base="$(basename "$f")"
     local out="$dest/${base%.md}${suffix}"
-<<<<<<< HEAD
-    if [[ -f "$out" ]]; then run "rm \"$out\""; count=$((count + 1)); fi
-=======
     if [[ -f "$out" ]]; then run rm "$out"; count=$((count + 1)); fi
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
   done < <(agent_files)
   ok "removed $count agents from $dest"
 }
 
-<<<<<<< HEAD
-=======
 # ---- opencode frontmatter conversion ---------------------------------------
 #
 # OpenCode agent files differ from Claude Code's:
@@ -267,32 +233,12 @@ install_opencode_to_dir() {
   ok "installed $count agents → $dest (opencode $OPENCODE_FMT frontmatter)"
 }
 
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 apply() {
   local target="$1"
   local action="install"; [[ $UNINSTALL -eq 1 ]] && action="uninstall"
   case "$target" in
     claude)
       info "$action: Claude Code (global) → $CLAUDE_GLOBAL"
-<<<<<<< HEAD
-      [[ $UNINSTALL -eq 1 ]] && uninstall_from_dir "$CLAUDE_GLOBAL" ".md" \
-                             || install_to_dir   "$CLAUDE_GLOBAL" ".md"
-      ;;
-    claude-local)
-      info "$action: Claude Code (project) → $CLAUDE_LOCAL"
-      [[ $UNINSTALL -eq 1 ]] && uninstall_from_dir "$CLAUDE_LOCAL" ".md" \
-                             || install_to_dir   "$CLAUDE_LOCAL" ".md"
-      ;;
-    copilot)
-      info "$action: GitHub Copilot Chat → $COPILOT_PROMPTS"
-      [[ $UNINSTALL -eq 1 ]] && uninstall_from_dir "$COPILOT_PROMPTS" ".chatmode.md" \
-                             || install_to_dir   "$COPILOT_PROMPTS" ".chatmode.md"
-      ;;
-    cursor)
-      info "$action: Cursor (project) → $CURSOR_LOCAL"
-      [[ $UNINSTALL -eq 1 ]] && uninstall_from_dir "$CURSOR_LOCAL" ".md" \
-                             || install_to_dir   "$CURSOR_LOCAL" ".md"
-=======
       if [[ $UNINSTALL -eq 1 ]]; then
         uninstall_from_dir "$CLAUDE_GLOBAL" ".md"
       else
@@ -338,7 +284,6 @@ apply() {
       else
         install_opencode_to_dir "$OPENCODE_LOCAL"
       fi
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
       ;;
     *) err "unknown target: $target"; exit 1 ;;
   esac
@@ -363,21 +308,14 @@ fi
 # interactive
 mapfile -t found < <(detect)
 if [[ ${#found[@]} -eq 0 ]]; then
-<<<<<<< HEAD
-  warn "no clients auto-detected (claude, code, cursor not in PATH)"
-=======
   warn "no clients auto-detected (claude, code, cursor, opencode not in PATH)"
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
   log "Pick a target manually:"
   log "  ./install.sh --target claude         (Claude Code global)"
   log "  ./install.sh --target claude-local   (Claude Code project)"
   log "  ./install.sh --target copilot        (Copilot Chat)"
   log "  ./install.sh --target cursor         (Cursor project)"
-<<<<<<< HEAD
-=======
   log "  ./install.sh --target opencode       (OpenCode global)"
   log "  ./install.sh --target opencode-local (OpenCode project)"
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
   exit 1
 fi
 

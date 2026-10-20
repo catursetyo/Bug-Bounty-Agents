@@ -12,13 +12,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `CONTRIBUTING.md` and `templates/AGENT_TEMPLATE.md` for new-agent submissions.
 - `SECURITY.md` describing how to report issues responsibly.
 - `install.sh` auto-detecting installer for Claude Code, Copilot Chat, and Cursor.
-<<<<<<< HEAD
-=======
 - OpenCode support in `install.sh` (`--target opencode`, `--target opencode-local`):
   converts Claude Code frontmatter to the OpenCode agent schema (auto-detects
   v1 `permission` maps vs v2 `permissions` rule lists), installs agents as
   `subagent`s, and skips prompt-layer files such as `_scope-guard.md`.
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 - `.github/` issue templates, PR template, and a markdown link-check workflow.
 - New agents: `binary-exploit`, `crypto-analyst`, `hardware-hacker`, `red-team-operator`, `purple-team`.
 - `examples/` directory with a sanitized end-to-end engagement walkthrough.
@@ -27,14 +24,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `README.md` redesigned: centered hero, monochrome badges, categorized agent
   catalog, ASCII workflow diagram, contributor section.
 
-<<<<<<< HEAD
-=======
 ### Fixed
 - `install.sh` now passes `shellcheck` cleanly: the `eval`-based `run()` helper
   executes commands directly, and `A && B || C` action dispatch in `apply()`
   was rewritten as explicit `if` blocks.
 
->>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 ## [1.0.0] - 2026-04-01
 
 ### Added
