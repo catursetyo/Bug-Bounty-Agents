@@ -5,17 +5,29 @@
 **A curated arsenal of specialized AI agent prompts for bug bounty hunting,
 penetration testing, and offensive security workflows.**
 
+<<<<<<< HEAD
 *Drop-in personas for Claude Code, Copilot Chat, Cursor, and any agent-capable LLM -
 no frameworks, no dependencies, just disciplined prompts.*
+=======
+*Drop-in personas for Claude Code, Copilot Chat, Cursor, OpenCode, and any
+agent-capable LLM - no frameworks, no dependencies, just disciplined prompts.*
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 
 <br />
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-black?style=for-the-badge)](LICENSE)
 [![Agents](https://img.shields.io/badge/agents-43-black?style=for-the-badge)](AGENTS.md)
+<<<<<<< HEAD
 [![Platform](https://img.shields.io/badge/platform-Claude%20%C2%B7%20Copilot%20%C2%B7%20Cursor%20%C2%B7%20ChatGPT-black?style=for-the-badge)](#per-tool-setup)
 [![CI](https://img.shields.io/badge/CI-passing-black?style=for-the-badge)](.github/workflows/lint.yml)
 
 <sub>**43** agents&nbsp;&nbsp;·&nbsp;&nbsp;**6** engagement phases&nbsp;&nbsp;·&nbsp;&nbsp;**4** supported clients&nbsp;&nbsp;·&nbsp;&nbsp;**0** dependencies</sub>
+=======
+[![Platform](https://img.shields.io/badge/platform-Claude%20%C2%B7%20Copilot%20%C2%B7%20Cursor%20%C2%B7%20OpenCode-black?style=for-the-badge)](#per-tool-setup)
+[![CI](https://img.shields.io/badge/CI-passing-black?style=for-the-badge)](.github/workflows/lint.yml)
+
+<sub>**43** agents&nbsp;&nbsp;·&nbsp;&nbsp;**6** engagement phases&nbsp;&nbsp;·&nbsp;&nbsp;**5** supported clients&nbsp;&nbsp;·&nbsp;&nbsp;**0** dependencies</sub>
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 
 <br />
 
@@ -29,8 +41,13 @@ no frameworks, no dependencies, just disciplined prompts.*
 
 Each `.md` file in this repository defines a focused, production-ready agent
 persona - recon, web hunting, exploit chaining, reporting, and more - that
+<<<<<<< HEAD
 you can drop into **Claude Code**, **GitHub Copilot Chat**, **Cursor**, or
 any agent-capable LLM client.
+=======
+you can drop into **Claude Code**, **GitHub Copilot Chat**, **Cursor**,
+**OpenCode**, or any agent-capable LLM client.
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 
 No frameworks. No dependencies. Just disciplined prompts that turn a generic
 LLM into a specialist, with strict scope enforcement built in.
@@ -51,6 +68,10 @@ LLM into a specialist, with strict scope enforcement built in.
    - [Claude Code](#claude-code-manual)
    - [GitHub Copilot Chat](#github-copilot-chat-vs-code-manual)
    - [Cursor](#cursor-manual)
+<<<<<<< HEAD
+=======
+   - [OpenCode](#opencode-manual)
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
    - [ChatGPT / Gemini / Generic](#chatgpt--gemini--generic)
 5. [Using an Agent](#using-an-agent)
 6. [Workflows](#workflows)
@@ -79,6 +100,11 @@ Or pick a specific target:
 ./install.sh --target claude-local   # Claude Code (this project)
 ./install.sh --target copilot        # Copilot Chat (VS Code)
 ./install.sh --target cursor         # Cursor (this project)
+<<<<<<< HEAD
+=======
+./install.sh --target opencode       # OpenCode (global)
+./install.sh --target opencode-local # OpenCode (this project)
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 ./install.sh --target all            # everything detected
 ./install.sh --dry-run --target claude
 ./install.sh --uninstall --target claude
@@ -173,6 +199,10 @@ machine-readable index lives in [AGENTS.md](AGENTS.md).
   - [Claude Code](https://claude.com/claude-code)
   - [GitHub Copilot Chat](https://github.com/features/copilot) (VS Code)
   - [Cursor](https://cursor.sh/)
+<<<<<<< HEAD
+=======
+  - [OpenCode](https://opencode.ai/)
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
   - ChatGPT (Custom GPTs / Projects), Gemini, or any chat UI accepting a system prompt
 
 ---
@@ -186,10 +216,18 @@ machine-readable index lives in [AGENTS.md](AGENTS.md).
 ./install.sh --help    # see all options
 ```
 
+<<<<<<< HEAD
 The installer auto-detects `claude`, `code`, and `cursor` on your `PATH`,
 copies agents to the correct directory for each, and renames files
 appropriately (e.g. `.chatmode.md` for Copilot). Use `--dry-run` to
 preview, `--uninstall` to remove.
+=======
+The installer auto-detects `claude`, `code`, `cursor`, and `opencode` on your
+`PATH`, copies agents to the correct directory for each, renames files
+appropriately (e.g. `.chatmode.md` for Copilot), and converts Claude Code
+frontmatter to the OpenCode agent schema for `--target opencode`. Use
+`--dry-run` to preview, `--uninstall` to remove.
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 
 <details>
 <summary><b>Claude Code</b> - manual install</summary>
@@ -253,6 +291,84 @@ Each file becomes a selectable rule in Cursor's chat panel.
 </details>
 
 <details>
+<<<<<<< HEAD
+=======
+<summary><b>OpenCode</b> - manual install</summary>
+
+<br />
+
+OpenCode reads markdown agents from `~/.config/opencode/agents/` (global) or
+`.opencode/agents/` (project), and its frontmatter is **not** Claude Code's:
+
+- the agent name comes from the **file name** - a `name:` key would be
+  passed through to the provider as a model option and must be removed
+- `model:` expects `provider/model-id`, so the `sonnet` alias is dropped and
+  agents inherit the invoking agent's model
+- `tools:` lists are replaced by permissions - a `permission` map on
+  OpenCode v1, a `permissions` rule list (with `shell` instead of `bash`) on v2
+
+`./install.sh --target opencode` performs this conversion automatically
+(detecting the installed OpenCode version), sets `mode: subagent` so the
+arsenal stays `@`-mentionable without flooding your primary Tab cycle, and
+skips `_scope-guard.md` (a shared prompt layer, not a standalone agent).
+42 of the 43 agents install; the installer reports what it does.
+
+Manual conversion of one agent - from:
+
+```yaml
+---
+name: web-hunter
+description: Delegates to this agent when ...
+tools:
+  - Bash
+  - Read
+  - WebFetch
+model: sonnet
+---
+```
+
+to:
+
+```yaml
+---
+description: Delegates to this agent when ...
+mode: subagent
+permission:
+  bash: ask
+  read: allow
+  webfetch: ask
+---
+```
+
+Tool-to-permission mapping applied by the installer:
+
+| Claude Code tool | OpenCode permission | Effect |
+|---|---|---|
+| `Bash` | `bash` (`shell` on v2) | `ask` |
+| `Read` | `read` | `allow` |
+| `Write`, `Edit` | `edit` | `ask` |
+| `Grep` | `grep` | `allow` |
+| `Glob` | `glob` | `allow` |
+| `WebFetch` | `webfetch` | `ask` |
+| `WebSearch` | `websearch` | `allow` |
+
+Active tools stay `ask` so every command against a target keeps its
+approval prompt, mirroring Claude Code's permission behavior - flip to
+`allow` in the generated files if the prompts get noisy.
+
+Invoke an agent with an `@` mention:
+
+```text
+@web-hunter
+Target: https://staging.acme.example.com
+Scope:  *.acme.example.com (in scope), *.thirdparty.example.com (out)
+Goal:   Find auth bypass and IDOR on /api/v2/users endpoints.
+```
+
+</details>
+
+<details>
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 <summary><b>ChatGPT / Gemini / Generic</b> - copy-paste</summary>
 
 <br />
@@ -345,7 +461,11 @@ while an agent in this repo provides the methodology.
 - Burp Suite (Community or Professional) installed and running
 - Java available on `PATH` (`java --version`)
 - `jar` available on `PATH` (`jar --version`) - required to build
+<<<<<<< HEAD
 - An MCP-capable client (Claude Desktop, Claude Code, Cursor, etc.)
+=======
+- An MCP-capable client (Claude Desktop, Claude Code, Cursor, OpenCode, etc.)
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 
 ### Build the extension
 
@@ -436,7 +556,11 @@ git pull
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add or update agents |
 | [`SECURITY.md`](SECURITY.md) | How to report prompt-safety issues |
 | [`LICENSE`](LICENSE) | MIT |
+<<<<<<< HEAD
 | [`install.sh`](install.sh) | Auto-detecting installer |
+=======
+| [`install.sh`](install.sh) | Auto-detecting installer (Claude Code, Copilot, Cursor, OpenCode) |
+>>>>>>> fd88053 (feat: add compatibility to opencode (oh my opencode))
 | [`templates/AGENT_TEMPLATE.md`](templates/AGENT_TEMPLATE.md) | Boilerplate for new agents |
 | [`examples/`](examples/) | Sanitized engagement walkthroughs |
 | [`.github/`](.github/) | Issue / PR templates and CI |
